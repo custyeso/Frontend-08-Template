@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>TicTacToe</title>
+	</head>	
+	<body>		
+		<style>
+			.chessBoardGrid {
+				width: 100px;
+				height: 100px;
+				background:greenyellow ;
+				display: inline-block;
+				border: solid 1px white;
+				vertical-align: middle;
+				
+				line-height: 100px;
+				font-size: 50px;
+				text-align: center;		
+			}
+	  </style>
+		<div id="chessBoardContainer"></div>
+	</body>
+	<script>	
+		let chessBoard=[
+				[0,0,0],
+				[0,0,0],
+				[0,0,0]
+			]
+		//console.log(chessBoard)	
+	  let hand=1
+		let dropQty=0
+		
+		function initialize(){
+			chessBoard=[
+				[0,0,0],
+				[0,0,0],
+				[0,0,0]
+			]			
+			hand=1
+			dropQty=0
+			show();
+		}
+
+		function show(){
+			let chessBoardContainer=document.getElementById("chessBoardContainer")
+			chessBoardContainer.innerHTML=""			
+		  for(let row=0;row<3;row++){ 
+		  	for(let column=0;column<3;column++){		  	
+		  		let grid=document.createElement("div")		  		  		
+		  		grid.classList.add("chessBoardGrid")	
+		  		let hand=chessBoard[row][column]
+		  		//grid.innerText= 
+					//	hand==2?"❌":
+					//	hand==1?"⭕":""
+		  		//grid.addEventListener("click",()=>drop(column,row)) 
+		  		
+		  		//*compatible IE10+
+		  		grid.innerText=["","⭕","❌"][hand]			  	
+		  		let x= column
+				  let y= row
+				  grid.addEventListener("click",function() { return drop(x,y) } )			  
+		  		chessBoardContainer.appendChild(grid)		  	
+		  	}
+		  	let brEle=document.createElement("br")
+		  	chessBoardContainer.appendChild(brEle)
+		  }		
+		}
+     
+    function drop(column,row){ 
+    	//check occupied
+    	if(chessBoard[row][column]){
+    		console.log(["","⭕","❌"][chessBoard[row][column]] + " occupied,another opt plz")
+    		return false
+    	}
+    	chessBoard[row][column]=hand    	
+    	if(isWin(row,column)){    		
+    		alert( ["","⭕","❌"][hand] + " is Win！")
+    		return initialize()
+    	}
+    	dropQty+=1
+    	//check drawn
+    	if(dropQty>=9){
+    		alert("Drawn Game！")
+    		return initialize()
+    	}    
+    	hand=3-hand
+    	show();
+    }
+    
+   
+    function isWin(dropRow,dropColumn){   
+			//scan column&row&arriswise
+			{
+				let win=true	
+				for(let column=0;column<3;column++){
+					if(chessBoard[dropRow][column] !=hand){
+						win=false
+					}
+				}
+				if(win) 
+					return true
+			}
+    	{
+				let win=true	
+				for(let row=0;row<3;row++){
+					if(chessBoard[row][dropColumn] !=hand){
+						win=false
+					}
+				}
+				if(win) 
+					return true
+			}
+    		    		
+    	// arriswise\
+    	if(dropRow==dropColumn){
+				let win=true	
+				for(let row=0;row<3;row++){
+					if(chessBoard[row][row] !=hand){
+						win=false
+					}
+				}
+				if(win) 
+					return true
+			} 
+		
+    	// arriswise/
+			if(dropRow+dropColumn==2){
+				let win=true 	
+				for(let row=0;row<3;row++){
+					if(chessBoard[row][2-row] !=hand){
+						win=false
+					}
+				}
+				if(win) 
+					return true
+			} 
+    	
+    }    
+     
+		show(chessBoard);
+	
+	</script>
+</html>
